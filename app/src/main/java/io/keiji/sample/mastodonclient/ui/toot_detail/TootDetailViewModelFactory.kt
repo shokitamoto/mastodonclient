@@ -1,24 +1,23 @@
-package io.keiji.sample.mastodonclient
+package io.keiji.sample.mastodonclient.ui.toot_detail
 
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.keiji.sample.mastodonclient.entity.Toot
 import kotlinx.coroutines.CoroutineScope
 
-class TootListViewModelFactory(
-    private val instanceUrl: String,
-    private val username: String,
+class TootDetailViewModelFactory(
+    private val toot: Toot?,
     private val coroutineScope: CoroutineScope,
     private val context: Context
-) : ViewModelProvider.Factory{
+) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return TootListViewModel(
-                instanceUrl,
-                username,
-                coroutineScope,
-                context.applicationContext as Application
+        return TootDetailViewModel(
+            toot,
+            coroutineScope,
+            context.applicationContext as Application
         ) as T
     }
 }
