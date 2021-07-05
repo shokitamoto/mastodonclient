@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import io.keiji.sample.mastodonclient.BuildConfig
 import io.keiji.sample.mastodonclient.R
 import io.keiji.sample.mastodonclient.databinding.FragmentTootListBinding
@@ -98,15 +99,7 @@ class TootListFragment : Fragment(R.layout.fragment_toot_list),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val tootListSnapshot = viewModel.tootList.value ?: ArrayList<Toot>().also {
-            viewModel.tootList.value = it
-        }
-
-        adapter = TootListAdapter(
-            layoutInflater,
-            tootListSnapshot,
-            this
-        )
+        adapter = TootListAdapter(layoutInflater, lifecycleScope, this)
         layoutManager = LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.VERTICAL,
@@ -128,7 +121,7 @@ class TootListFragment : Fragment(R.layout.fragment_toot_list),
             launchTootEditActivity()
         }
 
-        viewModel.loginRequire.observe(viewLifecycleOwner.Observer {
+        viewModel.loginRequired.observe(viewLifecycleOwner, Observer {
             if(it){
                 launchLoginActivity()
             }
@@ -137,11 +130,14 @@ class TootListFragment : Fragment(R.layout.fragment_toot_list),
         viewModel.isLoading.observe(viewLifecycleOwner, Observer {
             binding?.swipeRefreshLayout?.isRefreshing = it
         })
+        viewModel.errorMessage.observe(viewLifecycleOwner, Observer {
+            Snackbar.make(bindingData.swipeRefreshLayout, it, Snackbar.LENGTH_LONG).show()
+        })
         viewModel.accountInfo.observe(viewLifecycleOwner, Observer {
             showAccountInfo(it)
         })
         viewModel.tootList.observe(viewLifecycleOwner, Observer {
-            adapter.notifyDataSetChanged()
+            adapter.tootList = it
         })
 
         viewLifecycleOwner.lifecycle.addObserver(viewModel)
