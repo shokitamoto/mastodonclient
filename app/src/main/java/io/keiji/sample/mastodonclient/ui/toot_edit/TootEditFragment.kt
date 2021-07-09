@@ -17,7 +17,6 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import io.keiji.sample.mastodonclient.BuildConfig
 import io.keiji.sample.mastodonclient.R
-import io.keiji.sample.mastodonclient.databinding.FragmentTootEditBinding
 import io.keiji.sample.mastodonclient.ui.login.LoginActivity
 
 class TootEditFragment : Fragment(R.layout.fragment_toot_edit){
@@ -103,6 +102,7 @@ class TootEditFragment : Fragment(R.layout.fragment_toot_edit){
             && resultCode == Activity.RESULT_OK
             && uri != null) {
             viewModel.addMedia(uri)
+
         }
     }
 
@@ -133,4 +133,10 @@ class TootEditFragment : Fragment(R.layout.fragment_toot_edit){
         binding?.unbind()
     }
 
+    val binding: ActivityMainBinding = DataBindingUtil.setContentView(
+    )
+    val binding1: FragmentLoginBinding = DataBindingUtil.setContentView(
+    )
+    val binding2: ActivityLoginBingding = DataBindingUtil.setContentView(
+    )
 }
